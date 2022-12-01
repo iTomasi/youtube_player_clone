@@ -9,7 +9,7 @@ export default function Right () {
       <HiBell className={iconClassName} />
       <img
         className="w-8 h-8 rounded-full"
-        src="https://yt3.ggpht.com/ytc/AMLnZu_z3tnXFUrUSSd49RirGoRQJkHAAsWe7bYXyQpq=s88-c-k-c0x00ffffff-no-rj-mo"
+        src="/img/profile.jpeg"
         alt="iTomasi"
       />
       
