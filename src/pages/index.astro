@@ -1,8 +1,10 @@
 ---
 import Layout from 'layouts/Layout.astro'
-import Test from 'components/Test'
+import Left from 'components/Left/index'
+import Right from 'components/Right/index'
 ---
 
-<Layout title="Home">
-	<Test/>
+<Layout className="flex justify-center gap-4" title="Home">
+	<Left client:load/>
+	<Right/>
 </Layout>
