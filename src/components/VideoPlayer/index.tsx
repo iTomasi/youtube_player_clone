@@ -16,6 +16,7 @@ export default function VideoPlayer ({ url }: Props) {
     current: '0:00',
     duration: '0:00'
   })
+  const [volumePercentage, setVolumePercentage] = useState<number>(10)
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
@@ -23,7 +24,7 @@ export default function VideoPlayer ({ url }: Props) {
 
     if (!$video) return
 
-    $video.volume = 0.01
+    $video.volume = volumePercentage / 100
 
     const videoDuration = formatVideoTime($video.duration)
 
@@ -59,6 +60,16 @@ export default function VideoPlayer ({ url }: Props) {
     setIsPlaying(!$video.paused)
   }
 
+  const handleOnVolumePercentage = (percentage: number) => {
+    const { current: $video } = videoRef
+
+    if (!$video) return
+
+    $video.volume = percentage / 100
+
+    setVolumePercentage(percentage)
+  }
+
   return (
     <div className="flex justify-center bg-black relative">
       <video
@@ -72,6 +83,8 @@ export default function VideoPlayer ({ url }: Props) {
         isPlaying={isPlaying}
         current_time={time.current}
         duration_time={time.duration}
+        volume_percentage={volumePercentage}
+        onVolumePercentage={handleOnVolumePercentage}
       />
     </div>
   )
