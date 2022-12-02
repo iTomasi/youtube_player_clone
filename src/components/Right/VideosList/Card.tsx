@@ -1,3 +1,6 @@
+// Helpers
+import { formatNumber } from 'helpers'
+
 interface Props {
   title: string,
   img: string,
@@ -27,7 +30,7 @@ export default function Card ({
         <div className="text-[#AAAAAA] text-xs">
           <span className="block mb-0.5">{author}</span>
           <div className="flex items-center gap-1.5">
-            <span>{views} views</span>
+            <span>{formatNumber(views)} views</span>
             <span className="h-1 w-1 bg-[#AAAAAA] rounded-full"></span>
             <span>{time_ago}</span>
           </div>

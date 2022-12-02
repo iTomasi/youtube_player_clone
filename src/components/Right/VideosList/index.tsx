@@ -8,7 +8,7 @@ export default function VideosList () {
         img="/img/videos/1.webp"
         author="PHONKONAUT"
         time_ago="5 years ago"
-        views={500}
+        views={2999999000}
       />
     </div>
   )
