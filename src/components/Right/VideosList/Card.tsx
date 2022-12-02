@@ -7,7 +7,8 @@ interface Props {
   author: string,
   views: number,
   time_ago: string,
-  url: string
+  url: string,
+  duration: string
 }
 
 export default function Card ({
@@ -16,15 +17,18 @@ export default function Card ({
   author,
   views,
   time_ago,
-  url
+  url,
+  duration
 }: Props) {
   return (
     <a className="flex gap-2" href={url} target="_blank">
-      <div className="min-w-[168px] max-w-[168px] min-h-[94px] max-h-[94px] rounded-md overflow-hidden">
+      <div className="min-w-[168px] max-w-[168px] min-h-[94px] max-h-[94px] rounded-md overflow-hidden relative">
         <img
           className="min-w-[168px] max-w-[168px] min-h-[94px] max-h-[94px]"
           src={img}
         />
+
+        <span className="absolute bottom-1 right-1 text-xs bg-black px-1 py-0.5 rounded">{duration}</span>
       </div>
 
       <div>

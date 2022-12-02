@@ -4,6 +4,7 @@ const videosSuggested = [
     author: 'PHONKONAUT',
     url: 'https://www.youtube.com/watch?v=ndizAUAR_Cs',
     views: 14_000_000,
+    duration: '1:06:20',
     img: '/img/videos/1.webp',
     time_ago: '1 year ago'
   }
