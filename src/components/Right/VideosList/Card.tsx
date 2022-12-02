@@ -6,7 +6,8 @@ interface Props {
   img: string,
   author: string,
   views: number,
-  time_ago: string
+  time_ago: string,
+  url: string
 }
 
 export default function Card ({
@@ -14,19 +15,30 @@ export default function Card ({
   img,
   author,
   views,
-  time_ago
+  time_ago,
+  url
 }: Props) {
   return (
-    <div className="flex gap-2">
-      <div className="w-[168px] h-[94x] rounded-md overflow-hidden">
+    <a className="flex gap-2" href={url} target="_blank">
+      <div className="min-w-[168px] max-w-[168px] min-h-[94px] max-h-[94px] rounded-md overflow-hidden">
         <img
-          className="w-full h-full"
+          className="min-w-[168px] max-w-[168px] min-h-[94px] max-h-[94px]"
           src={img}
         />
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-[#F1F1F1] mb-1.5">{title}</h3>
+        <h3 
+          className="text-sm font-medium text-[#F1F1F1] mb-1.5 overflow-hidden"
+          style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            textOverflow: 'ellipsis'
+          }}
+        >
+          {title}
+        </h3>
         <div className="text-[#AAAAAA] text-xs">
           <span className="block mb-0.5">{author}</span>
           <div className="flex items-center gap-1.5">
@@ -36,6 +48,6 @@ export default function Card ({
           </div>
         </div>
       </div>
-    </div>
+    </a>
   )
 }

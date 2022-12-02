@@ -1,0 +1,1 @@
+export { default as videosSuggested } from './videosSuggested'

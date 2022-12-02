@@ -6,8 +6,6 @@ const formatNumber = (value: number) => {
   if (value < 1000) return valueSlice
   if (value < 1_000_000) return valueSlice.slice(0, valueModule === 0 ? 3 : valueModule) + 'K'
 
-  console.log(valueSlice)
-
   let measure = 'NN'
 
   if (value < 1_000_000_000) measure = 'M'
