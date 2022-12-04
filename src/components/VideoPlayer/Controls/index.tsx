@@ -12,6 +12,8 @@ interface Props {
   current_time: string,
   volume_percentage: number,
   onVolumePercentage: (percentage: number) => void
+  muted: boolean,
+  onSwitchMute: () => void
 }
 
 export default function Controls ({
@@ -20,7 +22,9 @@ export default function Controls ({
   duration_time,
   current_time,
   volume_percentage,
-  onVolumePercentage
+  onVolumePercentage,
+  muted,
+  onSwitchMute
 }: Props) {
   return (
     <div className="absolute bottom-0 left-0 right-0">
@@ -33,6 +37,8 @@ export default function Controls ({
         <Volume
           percentage={volume_percentage}
           onPercentage={onVolumePercentage}
+          muted={muted}
+          onSwitchMute={onSwitchMute}
         />
 
         <div className="flex gap-1 ml-2">

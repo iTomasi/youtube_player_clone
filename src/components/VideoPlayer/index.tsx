@@ -17,6 +17,7 @@ export default function VideoPlayer ({ url }: Props) {
     duration: '0:00'
   })
   const [volumePercentage, setVolumePercentage] = useState<number>(10)
+  const [muted, setMuted] = useState<boolean>(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
   useEffect(() => {
@@ -68,6 +69,16 @@ export default function VideoPlayer ({ url }: Props) {
     $video.volume = percentage / 100
 
     setVolumePercentage(percentage)
+
+    if ($video.muted) setMuted(false)
+  }
+
+  const handleOnSwitchMute = () => {
+    const { current: $video } = videoRef
+
+    if (!$video) return
+
+    setMuted(!$video.muted)
   }
 
   return (
@@ -76,6 +87,7 @@ export default function VideoPlayer ({ url }: Props) {
         className="max-h-[40rem] min-h-[30rem] min-w-[30rem] max-w-full"
         src={url}
         ref={videoRef}
+        muted={muted}
       ></video>
 
       <Controls
@@ -85,6 +97,8 @@ export default function VideoPlayer ({ url }: Props) {
         duration_time={time.duration}
         volume_percentage={volumePercentage}
         onVolumePercentage={handleOnVolumePercentage}
+        muted={muted}
+        onSwitchMute={handleOnSwitchMute}
       />
     </div>
   )
