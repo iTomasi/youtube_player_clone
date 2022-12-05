@@ -69,19 +69,21 @@ export default function VideoPlayer ({ url }: Props) {
     $video.pause()
   }, [isPlaying])
 
-  const handleOnClickPlay = () => setIsPlaying((prev) => !prev)
-
-  const handleOnVolumePercentage = (percentage: number) => {
+  useEffect(() => {
     const { current: $video } = videoRef
 
     if (!$video) return
 
-    $video.volume = percentage / 100
+    const theVolume = volumePercentage / 100
 
-    setVolumePercentage(percentage)
+    $video.volume = theVolume
 
     if ($video.muted) setMuted(false)
-  }
+
+  }, [volumePercentage])
+
+  const handleOnClickPlay = () => setIsPlaying((prev) => !prev)
+  const handleOnVolumePercentage = (percentage: number) => setVolumePercentage(percentage)
 
   const handleOnTrackPercentage = (percentage: number) => {
     const { current: $video } = videoRef
