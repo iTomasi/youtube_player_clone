@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Controls from './Controls'
 
 // Helpers
-import { formatVideoTime } from 'helpers'
+import { formatVideoTime, formatTrackToPercentage, formatTrackToCurrentTime } from 'helpers'
 
 interface Props {
   url: string
@@ -17,8 +17,11 @@ export default function VideoPlayer ({ url }: Props) {
     duration: '0:00'
   })
   const [volumePercentage, setVolumePercentage] = useState<number>(10)
+  const [trackPercentage, setTrackPercentage] = useState<number>(0)
   const [muted, setMuted] = useState<boolean>(false)
+
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const isPlayingRef = useRef<boolean>(false)
 
   useEffect(() => {
     const { current: $video } = videoRef
@@ -36,11 +39,14 @@ export default function VideoPlayer ({ url }: Props) {
 
     const handleOnTimeUpdate = () => {
       const timeFormated = formatVideoTime($video.currentTime)
+      const trackPercentage = formatTrackToPercentage({ currentTime: $video.currentTime, duration: $video.duration })
 
       setTime((prev) => ({
         ...prev,
         current: timeFormated
       }))
+
+      setTrackPercentage(trackPercentage)
     }
 
     $video.addEventListener('timeupdate', handleOnTimeUpdate)
@@ -73,6 +79,47 @@ export default function VideoPlayer ({ url }: Props) {
     if ($video.muted) setMuted(false)
   }
 
+  const handleOnTrackPercentage = (percentage: number) => {
+    const { current: $video } = videoRef
+
+    if (!$video) return
+
+    const theCurrentTime = formatTrackToCurrentTime({
+      duration: $video.duration,
+      percentage
+    })
+
+    $video.currentTime = theCurrentTime
+    setTrackPercentage(percentage)
+  }
+
+  const handleOnTrackMouseDown = () => {
+    isPlayingRef.current = isPlaying
+
+    if (!isPlaying) return
+
+    const { current: $video } = videoRef
+
+    if (!$video) return
+
+    $video.pause()
+    setIsPlaying(false)
+    
+  }
+
+  const handleOnTrackMouseUp = () => {
+    const { current: theIsPlaying } = isPlayingRef
+
+    if (!theIsPlaying) return
+
+    const { current: $video } = videoRef
+
+    if (!$video) return
+
+    $video.play()
+    setIsPlaying(true)
+  }
+
   const handleOnSwitchMute = () => {
     const { current: $video } = videoRef
 
@@ -95,8 +142,12 @@ export default function VideoPlayer ({ url }: Props) {
         isPlaying={isPlaying}
         current_time={time.current}
         duration_time={time.duration}
+        track_percentage={trackPercentage}
         volume_percentage={volumePercentage}
         onVolumePercentage={handleOnVolumePercentage}
+        onTrackPercentage={handleOnTrackPercentage}
+        onTrackMouseDown={handleOnTrackMouseDown}
+        onTrackMouseUp={handleOnTrackMouseUp}
         muted={muted}
         onSwitchMute={handleOnSwitchMute}
       />

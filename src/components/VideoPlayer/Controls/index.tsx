@@ -4,14 +4,19 @@ import type { MouseEventHandler } from 'react'
 import Button from './Button'
 import { BsPauseFill, BsPlayFill } from 'react-icons/bs'
 import Volume from './Volume'
+import Track from './Track'
 
 interface Props {
   onClickPlay: MouseEventHandler<HTMLButtonElement>,
   isPlaying: boolean,
   duration_time: string,
   current_time: string,
+  track_percentage: number,
   volume_percentage: number,
-  onVolumePercentage: (percentage: number) => void
+  onVolumePercentage: (percentage: number) => void,
+  onTrackPercentage: (percentage: number) => void,
+  onTrackMouseDown: () => void,
+  onTrackMouseUp: () => void,
   muted: boolean,
   onSwitchMute: () => void
 }
@@ -21,13 +26,25 @@ export default function Controls ({
   isPlaying,
   duration_time,
   current_time,
+  track_percentage,
   volume_percentage,
   onVolumePercentage,
+  onTrackPercentage,
+  onTrackMouseDown,
+  onTrackMouseUp,
   muted,
   onSwitchMute
 }: Props) {
   return (
     <div className="absolute bottom-0 left-0 right-0">
+
+      <Track
+        percentage={track_percentage}
+        onPercentage={onTrackPercentage}
+        onMouseDown={onTrackMouseDown}
+        onMouseUp={onTrackMouseUp}
+      />
+
       <div className="flex items-center">
         <Button
           icon={isPlaying ? BsPauseFill : BsPlayFill}
