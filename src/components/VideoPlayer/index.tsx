@@ -56,16 +56,20 @@ export default function VideoPlayer ({ url }: Props) {
     }
   }, [])
 
-  const handleOnClickPlay = () => {
+  useEffect(() => {
     const { current: $video } = videoRef
 
     if (!$video) return
 
-    if ($video.paused) $video.play()
-    else $video.pause()
+    if (isPlaying) {
+      $video.play()
+      return
+    }
 
-    setIsPlaying(!$video.paused)
-  }
+    $video.pause()
+  }, [isPlaying])
+
+  const handleOnClickPlay = () => setIsPlaying((prev) => !prev)
 
   const handleOnVolumePercentage = (percentage: number) => {
     const { current: $video } = videoRef
@@ -98,13 +102,7 @@ export default function VideoPlayer ({ url }: Props) {
 
     if (!isPlaying) return
 
-    const { current: $video } = videoRef
-
-    if (!$video) return
-
-    $video.pause()
     setIsPlaying(false)
-    
   }
 
   const handleOnTrackMouseUp = () => {
@@ -112,11 +110,6 @@ export default function VideoPlayer ({ url }: Props) {
 
     if (!theIsPlaying) return
 
-    const { current: $video } = videoRef
-
-    if (!$video) return
-
-    $video.play()
     setIsPlaying(true)
   }
 
