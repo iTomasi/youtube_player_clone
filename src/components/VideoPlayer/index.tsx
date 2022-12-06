@@ -181,7 +181,7 @@ export default function VideoPlayer ({ url }: Props) {
             url={url}
           />
         )
-      }
+      }   
     </div>
   )
 }

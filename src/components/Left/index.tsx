@@ -6,7 +6,7 @@ import VideoPlayer from 'components/VideoPlayer'
 import Information from './Information'
 
 export default function Left () {
-  const [videoUrl, setVideoUrl] = useState<string>('/iW-Waifu.mp4')
+  const [videoUrl, setVideoUrl] = useState<string>('')
 
   const handleOnFile = (url: string) => setVideoUrl(url)
 
