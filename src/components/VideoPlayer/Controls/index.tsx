@@ -13,6 +13,7 @@ interface Props {
   duration_time_number: number,
   current_time: string,
   track_percentage: number,
+  track_loaded_percentage: number,
   volume_percentage: number,
   onVolumePercentage: (percentage: number) => void,
   onTrackPercentage: (percentage: number) => void,
@@ -30,6 +31,7 @@ export default function Controls ({
   duration_time_number,
   current_time,
   track_percentage,
+  track_loaded_percentage,
   volume_percentage,
   onVolumePercentage,
   onTrackPercentage,
@@ -46,6 +48,7 @@ export default function Controls ({
         video_duration={duration_time_number}
         url={url}
         percentage={track_percentage}
+        percentage_loaded={track_loaded_percentage}
         onPercentage={onTrackPercentage}
         onMouseDown={onTrackMouseDown}
         onMouseUp={onTrackMouseUp}

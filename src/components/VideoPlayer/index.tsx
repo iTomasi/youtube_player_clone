@@ -22,6 +22,7 @@ export default function VideoPlayer ({ url }: Props) {
   })
   const [volumePercentage, setVolumePercentage] = useState<number>(10)
   const [trackPercentage, setTrackPercentage] = useState<number>(0)
+  const [trackLoadedPercentage, setTrackLoadedPercentage] = useState<number>(0)
   const [muted, setMuted] = useState<boolean>(false)
 
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -96,6 +97,19 @@ export default function VideoPlayer ({ url }: Props) {
     setTrackPercentage(trackPercentage)
   }
 
+  const handleOnProgress = (e: any) => {
+    const $video = e.currentTarget as HTMLVideoElement
+
+    const buffered = $video.buffered
+    const duration = $video.duration
+
+    if (duration <= 0 || buffered.length <= 0) return
+
+    const percentage = (buffered.end(0) * 100) / duration
+
+    setTrackLoadedPercentage(percentage)
+  }
+
   const handleOnTrackPercentage = (percentage: number) => {
     const { current: $video } = videoRef
 
@@ -142,9 +156,7 @@ export default function VideoPlayer ({ url }: Props) {
         muted={muted}
         onLoadedData={handleOnLoadedData}
         onTimeUpdate={handleOnTimeUpdate}
-        onProgress={(e: any) => {
-          console.log(e.target.buffered)
-        }}
+        onProgress={handleOnProgress}
       ></video>
 
       {
@@ -158,6 +170,7 @@ export default function VideoPlayer ({ url }: Props) {
             duration_time={time.duration}
             duration_time_number={time.duration_number}
             track_percentage={trackPercentage}
+            track_loaded_percentage={trackLoadedPercentage}
             volume_percentage={volumePercentage}
             onVolumePercentage={handleOnVolumePercentage}
             onTrackPercentage={handleOnTrackPercentage}

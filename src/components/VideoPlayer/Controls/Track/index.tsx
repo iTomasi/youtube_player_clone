@@ -7,6 +7,7 @@ import Preview from './Preview'
 import { formatVideoTime, formatTrackToCurrentTime } from 'helpers'
 interface Props {
   percentage: number,
+  percentage_loaded: number,
   video_duration: number,
   url: string,
   onPercentage: (value: number) => void,
@@ -38,6 +39,7 @@ const getPercentage = ($div: null | HTMLDivElement, clientX: number) => {
 
 export default function Track ({
   percentage,
+  percentage_loaded,
   url,
   video_duration,
   onPercentage,
@@ -108,7 +110,13 @@ export default function Track ({
           width={PREVIEW_VIDEO_WIDTH}
           {...preview}
         />
-        <div className="bg-white bg-opacity-30 h-1 group-hover:h-1.5 transition-all" ref={divRef}>
+        <div className="bg-white bg-opacity-30 h-1 group-hover:h-1.5 transition-all relative" ref={divRef}>
+          <div
+            className="absolute top-0 bottom-0 left-0 bg-white bg-opacity-50"
+            style={{
+              width: `${percentage_loaded}%`
+            }}
+          ></div>
           <div
             className="bg-[#FF0000] h-full relative flex items-center"
             style={{
