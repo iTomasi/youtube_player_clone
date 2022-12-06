@@ -142,6 +142,9 @@ export default function VideoPlayer ({ url }: Props) {
         muted={muted}
         onLoadedData={handleOnLoadedData}
         onTimeUpdate={handleOnTimeUpdate}
+        onProgress={(e: any) => {
+          console.log(e.target.buffered)
+        }}
       ></video>
 
       {
