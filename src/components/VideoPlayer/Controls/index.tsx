@@ -19,7 +19,8 @@ interface Props {
   onTrackMouseDown: () => void,
   onTrackMouseUp: () => void,
   muted: boolean,
-  onSwitchMute: () => void
+  onSwitchMute: () => void,
+  url: string,
 }
 
 export default function Controls ({
@@ -35,14 +36,15 @@ export default function Controls ({
   onTrackMouseDown,
   onTrackMouseUp,
   muted,
-  onSwitchMute
+  onSwitchMute,
+  url
 }: Props) {
   return (
     <div className="absolute bottom-0 left-0 right-0">
 
       <Track
         video_duration={duration_time_number}
-        url="/iW-Waifu.mp4"
+        url={url}
         percentage={track_percentage}
         onPercentage={onTrackPercentage}
         onMouseDown={onTrackMouseDown}

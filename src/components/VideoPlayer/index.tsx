@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react'
 
 // Components
 import Controls from './Controls'
+import LoaderSpinner from './LoaderSpinner'
 
 // Helpers
 import { formatVideoTime, formatTrackToPercentage, formatTrackToCurrentTime } from 'helpers'
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function VideoPlayer ({ url }: Props) {
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [time, setTime] = useState({
     current: '0:00',
@@ -29,6 +31,8 @@ export default function VideoPlayer ({ url }: Props) {
     const { current: $video } = videoRef
 
     if (!$video) return
+
+    setIsLoading(true)
 
     $video.src = url
   }, [url])
@@ -71,6 +75,8 @@ export default function VideoPlayer ({ url }: Props) {
       duration: videoDuration,
       duration_number: $video.duration
     }))
+
+    setIsLoading(false)
   }
 
   const handleOnClickPlay = () => setIsPlaying((prev) => !prev)
@@ -138,21 +144,28 @@ export default function VideoPlayer ({ url }: Props) {
         onTimeUpdate={handleOnTimeUpdate}
       ></video>
 
-      <Controls
-        onClickPlay={handleOnClickPlay}
-        isPlaying={isPlaying}
-        current_time={time.current}
-        duration_time={time.duration}
-        duration_time_number={time.duration_number}
-        track_percentage={trackPercentage}
-        volume_percentage={volumePercentage}
-        onVolumePercentage={handleOnVolumePercentage}
-        onTrackPercentage={handleOnTrackPercentage}
-        onTrackMouseDown={handleOnTrackMouseDown}
-        onTrackMouseUp={handleOnTrackMouseUp}
-        muted={muted}
-        onSwitchMute={handleOnSwitchMute}
-      />
+      {
+        isLoading ? (
+          <LoaderSpinner/>
+        ) : (
+          <Controls
+            onClickPlay={handleOnClickPlay}
+            isPlaying={isPlaying}
+            current_time={time.current}
+            duration_time={time.duration}
+            duration_time_number={time.duration_number}
+            track_percentage={trackPercentage}
+            volume_percentage={volumePercentage}
+            onVolumePercentage={handleOnVolumePercentage}
+            onTrackPercentage={handleOnTrackPercentage}
+            onTrackMouseDown={handleOnTrackMouseDown}
+            onTrackMouseUp={handleOnTrackMouseUp}
+            muted={muted}
+            onSwitchMute={handleOnSwitchMute}
+            url={url}
+          />
+        )
+      }
     </div>
   )
 }
