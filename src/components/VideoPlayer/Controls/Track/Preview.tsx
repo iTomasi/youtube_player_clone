@@ -1,6 +1,9 @@
+import { useEffect, useRef } from 'react'
+
 interface Props {
-  image_width: number,
+  width: number,
   left: number,
+  currentTime: number,
   video_time: string,
   url: string
 }
@@ -8,11 +11,22 @@ interface Props {
 const classNameImg = 'min-w-[144px] max-w-[144px] min-h-[5rem] max-h-[5rem]'
 
 export default function Preview ({
-  image_width,
+  width,
   left,
+  currentTime,
   video_time,
   url
 }: Props) {
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+
+  useEffect(() => {
+    const { current: $video } = videoRef
+
+    if (!$video) return
+
+    $video.currentTime = currentTime
+  }, [currentTime])
+
   return (
     <div
       className="absolute bottom-[150%] flex-col items-center gap-3 hidden group-hover:flex"
@@ -23,18 +37,19 @@ export default function Preview ({
       <div
         className={`${classNameImg} border-2 border-white overflow-hidden`}
         style={{
-          minWidth: `${image_width}px`,
-          maxWidth: `${image_width}px`
+          minWidth: `${width}px`,
+          maxWidth: `${width}px`
         }}
       >
-        <img
+        <video
+          ref={videoRef}
           className={`${classNameImg} object-cover object-center`}
           src={url}
           style={{
-            minWidth: `${image_width}px`,
-            maxWidth: `${image_width}px`
+            minWidth: `${width}px`,
+            maxWidth: `${width}px`
           }}
-        />
+        ></video>
       </div>
 
       <span className="text-sm">{video_time}</span>

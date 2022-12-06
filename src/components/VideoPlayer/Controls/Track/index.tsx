@@ -5,9 +5,6 @@ import Preview from './Preview'
 
 // Helpers
 import { formatVideoTime, formatTrackToCurrentTime } from 'helpers'
-
-// Utils
-import { videoScreenshot } from 'utils'
 interface Props {
   percentage: number,
   video_duration: number,
@@ -17,17 +14,10 @@ interface Props {
   onMouseUp: () => void
 }
 
-interface IPreviewScreenshot {
-  [key: number]: string
-}
-
-const PREVIEW_IMAGE_WIDTH = 144
-const PREVIEW_IMAGE_TOTAL = 5
-
-let savedPreviewScreenshots: IPreviewScreenshot = {}
+const PREVIEW_VIDEO_WIDTH = 144
+const PREVIEW_IMAGE_TOTAL = 50
 
 const getPercentage = ($div: null | HTMLDivElement, clientX: number) => {
-
   if (!$div) {
     console.log('<div></div> tag ref not exists track')
     return 0
@@ -54,14 +44,13 @@ export default function Track ({
   onMouseDown,
   onMouseUp
 }: Props) {
-  const isGeneratingImageRef = useRef<boolean>(false)
   const divRef = useRef<HTMLDivElement | null>(null)
-  const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const [preview, setPreview] = useState({
     left: 0,
     video_time: '0:00',
-    url: 'https://images3.alphacoders.com/716/716428.png'
+    currentTime: 0,
+    url
   })
 
   const handleOnMouseDown = (e: ReactMouseEvent<HTMLDivElement>) => {
@@ -81,40 +70,6 @@ export default function Track ({
     window.removeEventListener('mouseup', handleOnMouseUp)
   }
 
-  const getTrackImage = async (thePercentage: number) => {
-    const { current: $video } = videoRef
-
-    if (!$video || isGeneratingImageRef.current) return
-
-    console.log(savedPreviewScreenshots)
-
-    const percentageForPreview = thePercentage - (thePercentage % (100 / PREVIEW_IMAGE_TOTAL))
-
-    $video.currentTime = formatTrackToCurrentTime({ percentage: percentageForPreview, duration: video_duration })
-
-    let theUrl = ''
-
-    const getSavedScreenshot = savedPreviewScreenshots[percentageForPreview]
-
-    if (getSavedScreenshot) theUrl = getSavedScreenshot
-
-    else {
-      isGeneratingImageRef.current = true
-      const generateScreenshot = await videoScreenshot($video)
-      isGeneratingImageRef.current = false
-
-      savedPreviewScreenshots[percentageForPreview] = generateScreenshot.url
-
-      theUrl = generateScreenshot.url
-    }
-
-
-    setPreview((prev) => ({
-      ...prev,
-      url: theUrl
-    }))
-  }
-
   const handleOnMouseMove = async (e: ReactMouseEvent<HTMLDivElement>) => {
     const { current: $div } = divRef
 
@@ -122,22 +77,23 @@ export default function Track ({
 
     const { clientX } = e
     const { left, right } = $div.getBoundingClientRect()
-    const opImageWidth = PREVIEW_IMAGE_WIDTH / 2
+    const opImageWidth = PREVIEW_VIDEO_WIDTH / 2
 
     let theLeft = clientX - left - opImageWidth
 
     if (theLeft < 0) theLeft = 0
-    else if (clientX > right - opImageWidth) theLeft = (right - left) - PREVIEW_IMAGE_WIDTH
+    else if (clientX > right - opImageWidth) theLeft = (right - left) - PREVIEW_VIDEO_WIDTH
 
     const thePercentage = getPercentage(divRef.current, clientX)
     const theVideoTime = formatVideoTime((thePercentage / 100) * video_duration)
-
-    getTrackImage(thePercentage)
+    const percentageForPreview = thePercentage - (thePercentage % (100 / PREVIEW_IMAGE_TOTAL))
+    const theCurrentTime = formatTrackToCurrentTime({ duration: video_duration, percentage: percentageForPreview })
 
     setPreview((prev) => ({
       ...prev,
       left: theLeft,
-      video_time: theVideoTime
+      video_time: theVideoTime,
+      currentTime: theCurrentTime
     }))
   }
 
@@ -149,7 +105,7 @@ export default function Track ({
         onMouseMove={handleOnMouseMove}
       >
         <Preview
-          image_width={PREVIEW_IMAGE_WIDTH}
+          width={PREVIEW_VIDEO_WIDTH}
           {...preview}
         />
         <div className="bg-white bg-opacity-30 h-1 group-hover:h-1.5 transition-all" ref={divRef}>
@@ -163,12 +119,6 @@ export default function Track ({
           </div>
         </div>
       </div>
-
-      <video
-        className="absolute invisible w-10 h-10"
-        ref={videoRef}
-        src={url}
-      ></video>
     </div>
   )
 }
