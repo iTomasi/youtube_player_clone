@@ -1,10 +1,10 @@
-import { HiBars3 } from 'react-icons/hi2'
+import { BarsIcon } from 'components/icons'
 
 export default function Left () {
   return (
     <div className="w-[25%] flex items-center gap-6">
       <button type="button">
-        <HiBars3
+        <BarsIcon
           className="min-w-[1.75rem] max-w-[1.75rem] min-h-[1.75rem] max-h-[1.75rem]"
         />
       </button>

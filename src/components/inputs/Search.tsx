@@ -1,4 +1,4 @@
-import { HiSearch } from 'react-icons/hi'
+import { SearchIcon } from 'components/icons'
 
 export default function Search () {
   return (
@@ -10,7 +10,7 @@ export default function Search () {
       />
 
       <button className="bg-[#222222] min-w-[4rem] max-w-[4rem] flex justify-center items-center border-l border-[#303030]">
-        <HiSearch
+        <SearchIcon
           className="w-6 h-6 text-gray-300"
         />
       </button>

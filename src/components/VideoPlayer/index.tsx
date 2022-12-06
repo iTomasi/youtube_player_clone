@@ -1,3 +1,4 @@
+import type { ChangeEvent } from 'react'
 import { useState, useRef, useEffect } from 'react'
 
 // Components
@@ -29,34 +30,8 @@ export default function VideoPlayer ({ url }: Props) {
 
     if (!$video) return
 
-    $video.volume = volumePercentage / 100
-
-    const videoDuration = formatVideoTime($video.duration)
-
-    setTime((prev) => ({
-      ...prev,
-      duration: videoDuration,
-      duration_number: $video.duration
-    }))
-
-    const handleOnTimeUpdate = () => {
-      const timeFormated = formatVideoTime($video.currentTime)
-      const trackPercentage = formatTrackToPercentage({ currentTime: $video.currentTime, duration: $video.duration })
-
-      setTime((prev) => ({
-        ...prev,
-        current: timeFormated
-      }))
-
-      setTrackPercentage(trackPercentage)
-    }
-
-    $video.addEventListener('timeupdate', handleOnTimeUpdate)
-
-    return () => {
-      $video.removeEventListener('timeupdate', handleOnTimeUpdate)
-    }
-  }, [])
+    $video.src = url
+  }, [url])
 
   useEffect(() => {
     const { current: $video } = videoRef
@@ -84,8 +59,36 @@ export default function VideoPlayer ({ url }: Props) {
 
   }, [volumePercentage])
 
+  const handleOnLoadedData = (e: any) => {
+    const $video = e.currentTarget
+
+    $video.volume = volumePercentage / 100
+
+    const videoDuration = formatVideoTime($video.duration)
+
+    setTime((prev) => ({
+      ...prev,
+      duration: videoDuration,
+      duration_number: $video.duration
+    }))
+  }
+
   const handleOnClickPlay = () => setIsPlaying((prev) => !prev)
   const handleOnVolumePercentage = (percentage: number) => setVolumePercentage(percentage)
+
+  const handleOnTimeUpdate = (e: ChangeEvent<HTMLVideoElement>) => {
+    const $video = e.currentTarget
+
+    const timeFormated = formatVideoTime($video.currentTime)
+    const trackPercentage = formatTrackToPercentage({ currentTime: $video.currentTime, duration: $video.duration })
+
+    setTime((prev) => ({
+      ...prev,
+      current: timeFormated
+    }))
+
+    setTrackPercentage(trackPercentage)
+  }
 
   const handleOnTrackPercentage = (percentage: number) => {
     const { current: $video } = videoRef
@@ -129,9 +132,10 @@ export default function VideoPlayer ({ url }: Props) {
     <div className="flex justify-center bg-black relative">
       <video
         className="max-h-[40rem] min-h-[30rem] min-w-[30rem] max-w-full"
-        src={url}
         ref={videoRef}
         muted={muted}
+        onLoadedData={handleOnLoadedData}
+        onTimeUpdate={handleOnTimeUpdate}
       ></video>
 
       <Controls

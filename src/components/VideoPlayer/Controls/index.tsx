@@ -2,7 +2,7 @@ import type { MouseEventHandler } from 'react'
 
 // Components
 import Button from './Button'
-import { BsPauseFill, BsPlayFill } from 'react-icons/bs'
+import { PauseIcon, PlayIcon } from 'components/icons'
 import Volume from './Volume'
 import Track from './Track'
 
@@ -51,7 +51,7 @@ export default function Controls ({
 
       <div className="flex items-center">
         <Button
-          icon={isPlaying ? BsPauseFill : BsPlayFill}
+          icon={isPlaying ? PauseIcon : PlayIcon}
           onClick={onClickPlay}
         />
 

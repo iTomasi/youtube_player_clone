@@ -1,9 +1,8 @@
 import type { MouseEventHandler } from 'react'
-import type { IconType } from 'react-icons'
 
 interface Props {
   onClick: MouseEventHandler,
-  icon: IconType,
+  icon: any,
 }
 
 export default function Button ({ onClick, icon: Icon }: Props) {

@@ -1,5 +1,5 @@
 import { Button } from 'components/Buttons'
-import { FaGithub } from 'react-icons/fa'
+import { GitHubIcon } from 'components/icons'
 
 // Helpers
 import { formatNumber } from 'helpers'
@@ -26,7 +26,7 @@ export default function Author () {
         className="gap-2"
         type="link"
       >
-        <FaGithub
+        <GitHubIcon
           className="w-5 h-5"
         />
 

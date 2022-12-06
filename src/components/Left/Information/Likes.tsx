@@ -1,5 +1,5 @@
 // Components
-import { AiOutlineLike, AiOutlineDislike } from 'react-icons/ai'
+import { LikeIcon, DisLikeIcon } from 'components/icons'
 
 // Helpers
 import { formatNumber } from 'helpers'
@@ -22,7 +22,7 @@ export default function Likes ({
         type="button"
       >
         <span className={`${classNameSpan} pr-4 flex items-center gap-2 border-r border-[#555555]`}>
-          <AiOutlineLike
+          <LikeIcon
             className={classNameIcon}
           />
 
@@ -35,7 +35,7 @@ export default function Likes ({
         type="button"
       >
         <span className={classNameSpan}>
-          <AiOutlineDislike
+          <DisLikeIcon
             className={`${classNameIcon} scale-x-[-1]`}
           />
         </span>
