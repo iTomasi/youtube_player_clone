@@ -14,7 +14,8 @@ export default function VideoPlayer ({ url }: Props) {
   const [isPlaying, setIsPlaying] = useState<boolean>(false)
   const [time, setTime] = useState({
     current: '0:00',
-    duration: '0:00'
+    duration: '0:00',
+    duration_number: 0
   })
   const [volumePercentage, setVolumePercentage] = useState<number>(10)
   const [trackPercentage, setTrackPercentage] = useState<number>(0)
@@ -34,7 +35,8 @@ export default function VideoPlayer ({ url }: Props) {
 
     setTime((prev) => ({
       ...prev,
-      duration: videoDuration
+      duration: videoDuration,
+      duration_number: $video.duration
     }))
 
     const handleOnTimeUpdate = () => {
@@ -137,6 +139,7 @@ export default function VideoPlayer ({ url }: Props) {
         isPlaying={isPlaying}
         current_time={time.current}
         duration_time={time.duration}
+        duration_time_number={time.duration_number}
         track_percentage={trackPercentage}
         volume_percentage={volumePercentage}
         onVolumePercentage={handleOnVolumePercentage}

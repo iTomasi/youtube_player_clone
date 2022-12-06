@@ -10,6 +10,7 @@ interface Props {
   onClickPlay: MouseEventHandler<HTMLButtonElement>,
   isPlaying: boolean,
   duration_time: string,
+  duration_time_number: number,
   current_time: string,
   track_percentage: number,
   volume_percentage: number,
@@ -25,6 +26,7 @@ export default function Controls ({
   onClickPlay,
   isPlaying,
   duration_time,
+  duration_time_number,
   current_time,
   track_percentage,
   volume_percentage,
@@ -39,6 +41,8 @@ export default function Controls ({
     <div className="absolute bottom-0 left-0 right-0">
 
       <Track
+        video_duration={duration_time_number}
+        url="/iW-Waifu.mp4"
         percentage={track_percentage}
         onPercentage={onTrackPercentage}
         onMouseDown={onTrackMouseDown}
