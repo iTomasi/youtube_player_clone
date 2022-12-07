@@ -2,12 +2,13 @@ import type { MouseEventHandler } from 'react'
 
 // Components
 import Button from './Button'
-import { PauseIcon, PlayIcon } from 'components/icons'
+import { PauseIcon, PlayIcon, FullScreenIcon } from 'components/icons'
 import Volume from './Volume'
 import Track from './Track'
 
 interface Props {
   onClickPlay: MouseEventHandler<HTMLButtonElement>,
+  onClickFullScreen: MouseEventHandler<HTMLButtonElement>,
   isPlaying: boolean,
   duration_time: string,
   duration_time_number: number,
@@ -26,6 +27,7 @@ interface Props {
 
 export default function Controls ({
   onClickPlay,
+  onClickFullScreen,
   isPlaying,
   duration_time,
   duration_time_number,
@@ -54,23 +56,32 @@ export default function Controls ({
         onMouseUp={onTrackMouseUp}
       />
 
-      <div className="flex items-center">
-        <Button
-          icon={isPlaying ? PauseIcon : PlayIcon}
-          onClick={onClickPlay}
-        />
+      <div className="flex justify-between items-center">
+        <div className="flex items-center">
+          <Button
+            icon={isPlaying ? PauseIcon : PlayIcon}
+            onClick={onClickPlay}
+          />
 
-        <Volume
-          percentage={volume_percentage}
-          onPercentage={onVolumePercentage}
-          muted={muted}
-          onSwitchMute={onSwitchMute}
-        />
+          <Volume
+            percentage={volume_percentage}
+            onPercentage={onVolumePercentage}
+            muted={muted}
+            onSwitchMute={onSwitchMute}
+          />
 
-        <div className="flex gap-1 ml-2">
-          <span>{current_time}</span>
-          <span>/</span>
-          <span>{duration_time}</span>
+          <div className="flex gap-1 ml-2">
+            <span>{current_time}</span>
+            <span>/</span>
+            <span>{duration_time}</span>
+          </div>
+        </div>
+
+        <div>
+          <Button
+            icon={FullScreenIcon}
+            onClick={onClickFullScreen}
+          />
         </div>
       </div>
     </div>

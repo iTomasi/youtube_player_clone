@@ -24,7 +24,9 @@ export default function VideoPlayer ({ url }: Props) {
   const [trackPercentage, setTrackPercentage] = useState<number>(0)
   const [trackLoadedPercentage, setTrackLoadedPercentage] = useState<number>(0)
   const [muted, setMuted] = useState<boolean>(false)
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
 
+  const divRef = useRef<HTMLDivElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const isPlayingRef = useRef<boolean>(false)
 
@@ -64,6 +66,37 @@ export default function VideoPlayer ({ url }: Props) {
 
   }, [volumePercentage])
 
+  useEffect(() => {
+    const { current: $div } = divRef
+
+    if (!$div) return
+
+    if (!isFullScreen) {
+      if (document.fullscreenElement) document.exitFullscreen()
+      return
+    }
+
+    $div.requestFullscreen()
+  }, [isFullScreen])
+
+  useEffect(() => {
+    if (isLoading) return
+
+    const handleOnKeyPress = (e: KeyboardEvent) => {
+      const keyLower = e.key.toLowerCase()
+
+      if (keyLower === ' ' || keyLower === 'k') handleOnClickVideoPlay()
+      else if (keyLower === 'f') handleOnClickFullScreen()
+    }
+
+    window.addEventListener('keypress', handleOnKeyPress)
+
+    return () => {
+      window.removeEventListener('keypress', handleOnKeyPress)
+    }
+
+  }, [isLoading])
+
   const handleOnLoadedData = (e: any) => {
     const $video = e.currentTarget
 
@@ -81,6 +114,10 @@ export default function VideoPlayer ({ url }: Props) {
   }
 
   const handleOnClickPlay = () => setIsPlaying((prev) => !prev)
+  const handleOnClickVideoPlay = () => setIsPlaying((prev) => !prev)
+
+  const handleOnClickFullScreen = () => setIsFullScreen((prev) => !prev)
+
   const handleOnVolumePercentage = (percentage: number) => setVolumePercentage(percentage)
 
   const handleOnTimeUpdate = (e: ChangeEvent<HTMLVideoElement>) => {
@@ -149,14 +186,15 @@ export default function VideoPlayer ({ url }: Props) {
   }
 
   return (
-    <div className="flex justify-center bg-black relative">
+    <div ref={divRef} className="flex justify-center bg-black relative">
       <video
-        className="max-h-[40rem] min-h-[30rem] min-w-[30rem] max-w-full"
+        className={`${isFullScreen ? 'h-screen' : 'max-h-[40rem] min-h-[30rem]'} min-w-[30rem] max-w-full`}
         ref={videoRef}
         muted={muted}
         onLoadedData={handleOnLoadedData}
         onTimeUpdate={handleOnTimeUpdate}
         onProgress={handleOnProgress}
+        onClick={handleOnClickVideoPlay}
       ></video>
 
       {
@@ -165,6 +203,7 @@ export default function VideoPlayer ({ url }: Props) {
         ) : (
           <Controls
             onClickPlay={handleOnClickPlay}
+            onClickFullScreen={handleOnClickFullScreen}
             isPlaying={isPlaying}
             current_time={time.current}
             duration_time={time.duration}
