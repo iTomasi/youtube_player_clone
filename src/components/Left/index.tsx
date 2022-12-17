@@ -5,7 +5,16 @@ import { SelectVideo } from 'components/inputs'
 import VideoPlayer from 'components/VideoPlayer'
 import Information from './Information'
 
-export default function Left () {
+// Types
+import type { IAuthor } from 'types'
+
+interface Props {
+  author: IAuthor
+}
+
+export default function Left ({
+  author
+}: Props) {
   const [videoUrl, setVideoUrl] = useState<string>('')
 
   const handleOnFile = (url: string) => setVideoUrl(url)
@@ -20,7 +29,9 @@ export default function Left () {
 
       <h1 className="text-xl">Youtube video player clone</h1>
 
-      <Information/>
+      <Information
+        author={author}
+      />
     </div>
   )
 }

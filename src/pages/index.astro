@@ -2,9 +2,17 @@
 import Layout from 'layouts/Layout.astro'
 import Left from 'components/Left/index'
 import Right from 'components/Right/index'
+
+// Services
+import { FetchGetProfile } from 'services/gitHub'
+
+const profileData = await FetchGetProfile()
 ---
 
 <Layout className="flex justify-center gap-4" title="Clone - YouTube Player">
-	<Left client:load/>
+	<Left
+		author={profileData}
+		client:load
+	/>
 	<Right/>
 </Layout>
